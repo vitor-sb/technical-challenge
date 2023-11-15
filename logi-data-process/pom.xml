@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>vitorsb.project</groupId>
-	<artifactId>logi-data-transform</artifactId>
+	<artifactId>logi-data-process</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>logi-data-transform</name>
-	<description>logi-data-transform</description>
+	<name>logi-data-process</name>
+	<description>logi-data-process</description>
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.6.21</kotlin.version>

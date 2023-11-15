@@ -1,11 +1,10 @@
-package vitorsb.project.logidatatransform.controller
+package vitorsb.project.logidataprocess.controller
 
-import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import vitorsb.project.logidatatransform.exception.InvalidFileTypeException
-import vitorsb.project.logidatatransform.service.OrderService
+import vitorsb.project.logidataprocess.exception.InvalidFileTypeException
+import vitorsb.project.logidataprocess.service.OrderService
 
 @RestController
 @RequestMapping("/api/orders")
@@ -22,6 +21,5 @@ class OrderController(
         service.processTxtFile(file)
 
         return ResponseEntity.ok(mapOf("status" to "success", "message" to "File processed successfully"))
-
     }
 }

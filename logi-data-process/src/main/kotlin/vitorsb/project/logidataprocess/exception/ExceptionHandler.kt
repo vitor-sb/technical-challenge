@@ -1,11 +1,11 @@
-package vitorsb.project.logidatatransform.exception
+package vitorsb.project.logidataprocess.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
-import vitorsb.project.logidatatransform.dto.exception.ErrorDTO
+import vitorsb.project.logidataprocess.dto.exception.ErrorDTO
 import javax.servlet.http.HttpServletRequest
 
 @RestControllerAdvice

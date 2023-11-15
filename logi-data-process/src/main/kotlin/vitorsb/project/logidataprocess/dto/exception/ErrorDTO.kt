@@ -1,4 +1,4 @@
-package vitorsb.project.logidatatransform.dto.exception
+package vitorsb.project.logidataprocess.dto.exception
 
 import java.time.LocalDateTime
 

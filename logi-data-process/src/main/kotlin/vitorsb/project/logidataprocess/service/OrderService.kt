@@ -1,4 +1,4 @@
-package vitorsb.project.logidatatransform.service
+package vitorsb.project.logidataprocess.service
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -19,10 +19,14 @@ class OrderService {
         val lines = try {
              BufferedReader(InputStreamReader(file.inputStream)).readLines()
         } catch (e: Exception) {
-            throw Exception("M=processTxtFile - Error processing file: ${e.message}")
+            logger.error("M=processTxtFile - Error: ${e.message}")
+            throw Exception("M=processTxtFile - Error: error reading file")
         }
 
         lines.forEach {
+            if(it.length != 95)
+                throw Exception("M=processTxtFile - Error: invalid line length")
+
             logger.info("M=processTxtFile - Line: $it")
         }
     }
