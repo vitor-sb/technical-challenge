@@ -3,7 +3,7 @@ version: "3.5"
 services:
   mysql_container:
     image: mysql:8.0.33
-    container_name: my_container
+    container_name: logi_container
     ports:
       - "3306:3306"
     volumes:
