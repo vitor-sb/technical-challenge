@@ -1,14 +1,25 @@
 package vitorsb.project.logidataprocess.entity
 
-import java.time.LocalDateTime
-import javax.persistence.Id
+import java.time.LocalDate
+import javax.persistence.*
 
+@Entity
 data class Order(
     @Id
     var id: Long? = null,
-    val purchaseDate: LocalDateTime,
-    val user: User,
-    val products: List<Product>
+    val purchaseDate: LocalDate,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User? = null,
+
+    @ManyToMany
+    @JoinTable(
+        name = "order_products",
+        joinColumns = [JoinColumn(name = "order_id")],
+        inverseJoinColumns = [JoinColumn(name = "product_id")]
+    )
+    val products: MutableList<Product> = ArrayList()
 ){
     fun totalValue(): Double {
         return products.sumOf { it.value }

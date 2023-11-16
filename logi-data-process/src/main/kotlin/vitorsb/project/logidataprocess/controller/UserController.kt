@@ -4,15 +4,15 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import vitorsb.project.logidataprocess.exception.InvalidFileTypeException
-import vitorsb.project.logidataprocess.service.OrderService
+import vitorsb.project.logidataprocess.service.UserService
 
 @RestController
-@RequestMapping("/api/orders")
-class OrderController(
-    private val service: OrderService
+@RequestMapping("/api/users")
+class UserController(
+    private val service: UserService
 ) {
 
-    @PostMapping
+    @PostMapping("/processTxtFile")
     @ResponseBody
     fun processTxtFile(@RequestParam("file") file: MultipartFile): ResponseEntity<Map<String, Any>> {
         if (!file.contentType.equals("text/plain"))
