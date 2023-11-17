@@ -20,8 +20,4 @@ data class Order(
         inverseJoinColumns = [JoinColumn(name = "product_id")]
     )
     val products: MutableList<Product> = ArrayList()
-){
-    fun totalValue(): Double {
-        return products.sumOf { it.value }
-    }
-}
+)
