@@ -4,21 +4,25 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import vitorsb.project.logidataprocess.entity.Product
-import vitorsb.project.logidataprocess.entity.User
-import vitorsb.project.logidataprocess.mapper.OrderMapper.toOrder
+import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
+import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
+import vitorsb.project.logidataprocess.mapper.OrderMapper
+import vitorsb.project.logidataprocess.mapper.ProductMapper
+import vitorsb.project.logidataprocess.mapper.UserMapper
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import vitorsb.project.logidataprocess.mapper.UserMapper.toProcessTxtLineDTO
-import vitorsb.project.logidataprocess.mapper.UserMapper.toUser
 
 @Service
-class UserService{
+class UserService(
+    val mapper: UserMapper,
+    val orderMapper: OrderMapper,
+    val productMapper: ProductMapper
+){
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     @Transactional
-    fun processTxtFile(file: MultipartFile) {
+    fun processTxtFile(file: MultipartFile): MutableList<UserTxtFileResponseDTO> {
         logger.info("M=processTxtFile - Processing txt file")
 
         val lines = try {
@@ -28,35 +32,41 @@ class UserService{
             throw Exception("M=processTxtFile - Error: error reading file")
         }
 
-        val users: MutableList<User> = mutableListOf()
+        val processResponse: MutableList<UserTxtFileResponseDTO> = mutableListOf()
 
         lines.forEach { line ->
             if(line.trim().isNotEmpty()){
-
                 if(line.length != 95)
                     throw Exception("M=processTxtFile - Error: invalid line length (line: $line)")
 
-                val lineDTO = line.toProcessTxtLineDTO()
+                val lineDTO = mapper.toProcessTxtLineDTO(line)
+                val foundUser = processResponse.find { user -> user.user_id == lineDTO.userId }
 
-                val registeredUser = users.find { user -> user.id == lineDTO.userId }
-                registeredUser?.let {
-
-                    val registeredOrder = registeredUser.orders.find { order -> order.id == lineDTO.orderId }
-                    registeredOrder?.let {
-
-                        registeredOrder.products.add(
-                            Product(
-                                id = lineDTO.productId,
-                                value = lineDTO.productValue
-                            )
-                        )
-
-                    } ?: registeredUser.orders.add(lineDTO.toOrder())
-
-                } ?: users.add(lineDTO.toUser())
-
+                if(foundUser !== null) {
+                    createOrUpdateOrder(foundUser, lineDTO)
+                } else {
+                    logger.debug("M=processTxtFile - Creating new user: ${lineDTO.userId}")
+                    processResponse.add(mapper.toUserTxtFileResponseDTO(lineDTO))
+                }
             }
         }
-        logger.info("M=processTxtFile - Users: ${users.size}")
+        return processResponse
+    }
+
+    private fun createOrUpdateOrder(foundUser: UserTxtFileResponseDTO, lineDTO: ProcessTxtLineDTO) {
+        val foundOrder = foundUser.orders.find { order -> order.order_id == lineDTO.orderId }
+
+        if(foundOrder !== null) {
+            logger.debug("M=createOrUpdateOrder - Adding product to order: ${lineDTO.orderId}")
+
+            foundOrder.products.add(
+                productMapper.toProductTxtFileResponseDTO(lineDTO)
+            )
+            foundOrder.total += lineDTO.productValue
+
+        } else {
+            logger.debug("M=createOrUpdateOrder - Creating new order for user: ${foundUser.user_id}")
+            foundUser.orders.add(orderMapper.toOrderTxtFileResponseDTO(lineDTO))
+        }
     }
 }

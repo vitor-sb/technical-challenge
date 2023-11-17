@@ -1,20 +1,21 @@
 package vitorsb.project.logidataprocess.mapper
 
 import org.springframework.stereotype.Component
-import vitorsb.project.logidataprocess.dto.ProcessTxtLineDTO
-import vitorsb.project.logidataprocess.entity.User
-import vitorsb.project.logidataprocess.mapper.OrderMapper.toOrder
-import vitorsb.project.logidataprocess.utils.DateFormat
+import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
+import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
+import vitorsb.project.logidataprocess.utils.DateUtils
 
 @Component
-object UserMapper {
-    fun String.toProcessTxtLineDTO(): ProcessTxtLineDTO {
-        val userId = this.substring(0, 10).toLong()
-        val userName = this.substring(10, 55).trimStart()
-        val orderId = this.substring(55, 65).toLong()
-        val productId = this.substring(65, 75).toLong()
-        val productValue = this.substring(75, 87).toDouble()
-        val purchaseDate = DateFormat().formatStringToLocalDate(this.substring(87, 95))
+class UserMapper(
+    val orderMapper: OrderMapper
+) {
+    fun toProcessTxtLineDTO(line: String): ProcessTxtLineDTO {
+        val userId = line.substring(0, 10).toLong()
+        val userName = line.substring(10, 55).trimStart()
+        val orderId = line.substring(55, 65).toLong()
+        val productId = line.substring(65, 75).toLong()
+        val productValue = line.substring(75, 87).toDouble()
+        val purchaseDate = DateUtils().formatStringToLocalDate(line.substring(87, 95))
 
         return ProcessTxtLineDTO(
             userId = userId,
@@ -26,11 +27,13 @@ object UserMapper {
         )
     }
 
-    fun ProcessTxtLineDTO.toUser(): User {
-        return User(
-            id = this.userId,
-            name = this.userName,
-            orders = mutableListOf(this.toOrder())
+    fun toUserTxtFileResponseDTO(lineDTO: ProcessTxtLineDTO): UserTxtFileResponseDTO {
+        return UserTxtFileResponseDTO(
+            user_id = lineDTO.userId,
+            name = lineDTO.userName,
+            orders = mutableListOf(
+                orderMapper.toOrderTxtFileResponseDTO(lineDTO)
+            )
         )
     }
 }
