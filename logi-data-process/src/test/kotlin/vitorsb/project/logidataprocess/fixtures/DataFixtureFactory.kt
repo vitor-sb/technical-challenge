@@ -138,6 +138,45 @@ internal object DataFixtureFactory {
 
             return mutableListOf(firstUser, secondUser, thirdUser)
         }
+        fun validTwoUsersWithOrderAndProduct(): MutableList<UserTxtFileResponseDTO> {
+            val firstProduct = ProductTxtFileResponseDTO(
+                product_id = 3,
+                value = 1899.02
+            )
+
+            val firstUser = UserTxtFileResponseDTO(
+                user_id = 88,
+                name = "Terra Daniel DDS",
+                orders = mutableListOf(
+                    OrderTxtFileResponseDTO(
+                        order_id = 836,
+                        products = mutableListOf(firstProduct),
+                        date = LocalDate.parse("2021-09-09"),
+                        total = firstProduct.value
+                    )
+                )
+            )
+
+            val secondProduct = ProductTxtFileResponseDTO(
+                product_id = 1,
+                value = 1760.01
+            )
+
+            val secondUser = UserTxtFileResponseDTO(
+                user_id = 89,
+                name = "Carlos Marco DDS",
+                orders = mutableListOf(
+                    OrderTxtFileResponseDTO(
+                        order_id = 837,
+                        products = mutableListOf(secondProduct),
+                        date = LocalDate.parse("2021-09-09"),
+                        total = secondProduct.value
+                    )
+                )
+            )
+
+            return mutableListOf(firstUser, secondUser)
+        }
     }
 
     object InvalidDataParameters {

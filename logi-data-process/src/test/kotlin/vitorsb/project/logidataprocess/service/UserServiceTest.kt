@@ -12,7 +12,7 @@ import java.io.File
 class UserServiceTest {
     private val userService: UserService = UserService()
     @Test
-    fun `must return UserTxtFileResponseDTO with one user, one order and three products`() {
+    fun `must return UserTxtFileResponseDTO list with one user, one order and three products`() {
         // given
         val dataFile = File("src/test/resources/data/valid-test-one-user-with-one-order-and-three-products.txt")
         val file: MultipartFile = MockMultipartFile(
@@ -30,7 +30,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `must return UserTxtFileResponseDTO with one user, two orders and products`() {
+    fun `must return UserTxtFileResponseDTO list with one user, two orders and products`() {
         // given
         val dataFile = File("src/test/resources/data/valid-test-one-user-with-two-ordes-and-products.txt")
         val file: MultipartFile = MockMultipartFile(
@@ -48,7 +48,7 @@ class UserServiceTest {
     }
 
     @Test
-    fun `must return UserTxtFileResponseDTO with three users with order and product`() {
+    fun `must return UserTxtFileResponseDTO list with three users with order and product`() {
         // given
         val dataFile = File("src/test/resources/data/valid-test-three-users-with-order-and-product.txt")
         val file: MultipartFile = MockMultipartFile(
@@ -63,6 +63,23 @@ class UserServiceTest {
 
         // then
         assertEquals(DataFixtureFactory.ValidDataResponses.validThreeUsersWithOrderAndProduct(), response)
+    }
+    @Test
+    fun `must return UserTxtFileResponseDTO list with two users with order and product even with empty line`() {
+        // given
+        val dataFile = File("src/test/resources/data/valid-test-two-users-and-line-empty.txt")
+        val file: MultipartFile = MockMultipartFile(
+            "test.txt",
+            "valid-test-two-users-and-line-empty.txt",
+            "text/plain",
+            dataFile.inputStream()
+        )
+
+        // when
+        val response = userService.processTxtFile(file)
+
+        // then
+        assertEquals(DataFixtureFactory.ValidDataResponses.validTwoUsersWithOrderAndProduct(), response)
     }
 
     @Test
