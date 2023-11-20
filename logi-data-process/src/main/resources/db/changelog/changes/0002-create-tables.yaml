@@ -9,8 +9,14 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
+              - column:
+                  name: external_id
+                  type: bigint
+                  constraints:
                     nullable: false
               - column:
                   name: purchase_date
@@ -30,8 +36,14 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
+              - column:
+                  name: external_id
+                  type: bigint
+                  constraints:
                     nullable: false
               - column:
                   name: value
@@ -41,6 +53,13 @@ databaseChangeLog:
         - createTable:
             tableName: order_products
             columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
                   name: order_id
                   type: bigint
@@ -55,7 +74,3 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_product_id
                     references: product(id)
-        - addPrimaryKey:
-            columnNames: order_id, product_id
-            constraintName: pk_order_products
-            tableName: order_products

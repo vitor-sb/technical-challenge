@@ -4,8 +4,8 @@ import javax.persistence.*
 
 @Entity
 data class User(
-    @Id
-    var id: Long? = null,
+    @Id @Column(nullable = false)
+    var id: Long,
 
     @Column(nullable = false, length = 45)
     val name: String,

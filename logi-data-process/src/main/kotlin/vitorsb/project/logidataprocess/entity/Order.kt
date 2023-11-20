@@ -5,9 +5,12 @@ import javax.persistence.*
 
 @Entity
 data class Order(
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
+
     val purchaseDate: LocalDate,
+
+    val externalId: Long,
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
