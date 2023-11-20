@@ -4,6 +4,7 @@ import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
+@Table(name = "user_order")
 data class Order(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
@@ -14,11 +15,11 @@ data class Order(
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    val user: User? = null,
+    var user: User? = null,
 
     @ManyToMany
     @JoinTable(
-        name = "order_products",
+        name = "order_product_relation",
         joinColumns = [JoinColumn(name = "order_id")],
         inverseJoinColumns = [JoinColumn(name = "product_id")]
     )

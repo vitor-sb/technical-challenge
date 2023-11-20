@@ -1,19 +1,27 @@
 package vitorsb.project.logidataprocess.service
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
+import vitorsb.project.logidataprocess.dto.user.UserDTO
 import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
+import vitorsb.project.logidataprocess.entity.User
 import vitorsb.project.logidataprocess.mapper.OrderMapper
 import vitorsb.project.logidataprocess.mapper.ProductMapper
 import vitorsb.project.logidataprocess.mapper.UserMapper
+import vitorsb.project.logidataprocess.repository.UserRepository
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 @Service
-class UserService {
+class UserService(
+    private val repository: UserRepository,
+    private val orderService: OrderService,
+    private val productService: ProductService
+) {
     private val mapper: UserMapper = UserMapper()
     private val orderMapper: OrderMapper = OrderMapper()
     private val productMapper: ProductMapper = ProductMapper()
@@ -21,7 +29,10 @@ class UserService {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     @Transactional
-    fun processTxtFile(file: MultipartFile): MutableList<UserTxtFileResponseDTO> {
+    fun processTxtFile(
+        file: MultipartFile,
+        toSave: Boolean? = false)
+    : MutableList<UserTxtFileResponseDTO> {
         logger.info("M=processTxtFile - Processing txt file")
 
         val lines = try {
@@ -54,6 +65,10 @@ class UserService {
                 }
             }
         }
+
+        if(toSave == true)
+            createUsers(processResponse)
+
         return processResponse
     }
 
@@ -72,5 +87,30 @@ class UserService {
             logger.debug("M=createOrUpdateOrder - Creating new order for user: ${foundUser.user_id}")
             foundUser.orders.add(orderMapper.toOrderTxtFileResponseDTO(lineDTO))
         }
+    }
+
+    @Transactional
+    fun createUsers(users: MutableList<UserTxtFileResponseDTO>) {
+        logger.info("M=saveUsers - Saving ${users.size} users")
+
+        users.forEach { user ->
+            val persistedUser = createUser(user)
+            user.orders.forEach { order ->
+                val persistedOrder = orderService.createOrder(order, persistedUser)
+                order.products.forEach { product ->
+                    val persistedProduct = productService.createProduct(product)
+                    orderService.relateOrderProduct(persistedOrder.id!!, persistedProduct.id!!)
+                }
+            }
+        }
+    }
+
+    @Transactional
+    fun createUser(user: UserTxtFileResponseDTO): User {
+        logger.debug("M=saveUser - Saving user with id:${user.user_id}")
+
+        val userDTO: UserDTO = mapper.toDto(user)
+
+        return repository.save(mapper.toEntity(userDTO))
     }
 }

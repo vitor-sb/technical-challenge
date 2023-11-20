@@ -5,12 +5,40 @@ import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
 import fixtures.DataFixtureFactory
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.fail
+import org.mockito.Mock
+import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
+import vitorsb.project.logidataprocess.repository.OrderRepository
+import vitorsb.project.logidataprocess.repository.ProductRepository
+import vitorsb.project.logidataprocess.repository.UserRepository
+import vitorsb.project.logidataprocess.service.OrderService
+import vitorsb.project.logidataprocess.service.ProductService
 import vitorsb.project.logidataprocess.service.UserService
 import java.io.File
 
 class UserServiceTest {
-    private val userService: UserService = UserService()
+
+    @Mock
+    private lateinit var userRepository: UserRepository
+    @Mock
+    private lateinit var productRepository: ProductRepository
+    @Mock
+    private lateinit var orderRepository: OrderRepository
+    @Mock
+    private lateinit var orderProductRelationRepository: OrderProductRelationRepository
+
+    private lateinit var userService: UserService
+    private lateinit var orderService: OrderService
+    private lateinit var productService: ProductService
+
+    @BeforeAll
+    fun setUp() {
+        userService = UserService(userRepository, orderService, productService)
+        productService = ProductService(productRepository)
+        orderService = OrderService(orderRepository, orderProductRelationRepository)
+    }
+
     @Test
     fun `must return UserTxtFileResponseDTO list with one user, one order and three products`() {
         // given
