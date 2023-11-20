@@ -9,9 +9,8 @@ import vitorsb.project.logidataprocess.service.UserService
 
 @RestController
 @RequestMapping("/api/users")
-class UserController(
-    private val service: UserService
-) {
+class UserController {
+    private val service = UserService()
 
     @PostMapping("/processTxtFile")
     @ResponseBody
@@ -19,7 +18,7 @@ class UserController(
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<MutableList<UserTxtFileResponseDTO>> {
         if (!file.contentType.equals("text/plain"))
-            throw InvalidFileTypeException("The file must be text type")
+            throw InvalidFileTypeException("M=processTxtFile - File The file must be text type")
 
         val response = service.processTxtFile(file)
 

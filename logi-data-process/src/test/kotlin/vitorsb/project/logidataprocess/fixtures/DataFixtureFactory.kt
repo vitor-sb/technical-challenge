@@ -39,8 +39,50 @@ internal object DataFixtureFactory {
             return mutableListOf(user)
         }
 
+        fun validOneUserWithTwoOrdersAndProducts(): MutableList<UserTxtFileResponseDTO> {
+            val firstOrderProducts = mutableListOf(
+                ProductTxtFileResponseDTO(
+                    product_id = 3,
+                    value = 1899.02
+                ),
+                ProductTxtFileResponseDTO(
+                    product_id = 6,
+                    value = 224.75,
+                ),
+            )
+
+            val secondOrderProducts = mutableListOf(
+                ProductTxtFileResponseDTO(
+                    product_id = 1,
+                    value = 1760.01,
+                )
+            )
+
+            val firstOrder = OrderTxtFileResponseDTO(
+                order_id = 836,
+                products = firstOrderProducts,
+                date = LocalDate.parse("2021-09-09"),
+                total = firstOrderProducts.sumOf { it.value }
+            )
+
+            val secondOrder = OrderTxtFileResponseDTO(
+                order_id = 837,
+                products = secondOrderProducts,
+                date = LocalDate.parse("2021-11-22"),
+                total = secondOrderProducts.sumOf { it.value }
+            )
+
+            val user = UserTxtFileResponseDTO(
+                user_id = 88,
+                name = "Terra Daniel DDS",
+                orders = mutableListOf(firstOrder, secondOrder)
+            )
+
+            return mutableListOf(user)
+        }
+
         fun validThreeUsersWithOrderAndProduct(): MutableList<UserTxtFileResponseDTO> {
-            val firstProduct =  ProductTxtFileResponseDTO(
+            val firstProduct = ProductTxtFileResponseDTO(
                 product_id = 3,
                 value = 1899.02
             )
@@ -50,14 +92,15 @@ internal object DataFixtureFactory {
                 name = "Terra Daniel DDS",
                 orders = mutableListOf(
                     OrderTxtFileResponseDTO(
-                    order_id = 836,
-                    products = mutableListOf(firstProduct),
-                    date = LocalDate.parse("2021-09-09"),
-                    total = firstProduct.value
-                ))
+                        order_id = 836,
+                        products = mutableListOf(firstProduct),
+                        date = LocalDate.parse("2021-09-09"),
+                        total = firstProduct.value
+                    )
+                )
             )
 
-            val secondProduct =  ProductTxtFileResponseDTO(
+            val secondProduct = ProductTxtFileResponseDTO(
                 product_id = 6,
                 value = 224.75
             )
@@ -71,10 +114,11 @@ internal object DataFixtureFactory {
                         products = mutableListOf(secondProduct),
                         date = LocalDate.parse("2021-11-22"),
                         total = secondProduct.value
-                    ))
+                    )
+                )
             )
 
-            val thirdProduct =  ProductTxtFileResponseDTO(
+            val thirdProduct = ProductTxtFileResponseDTO(
                 product_id = 1,
                 value = 1760.01
             )
@@ -88,7 +132,8 @@ internal object DataFixtureFactory {
                         products = mutableListOf(thirdProduct),
                         date = LocalDate.parse("2021-10-12"),
                         total = thirdProduct.value
-                    ))
+                    )
+                )
             )
 
             return mutableListOf(firstUser, secondUser, thirdUser)
@@ -102,5 +147,6 @@ internal object DataFixtureFactory {
             "0000000008                             Terra Daniel DDS00000008360000000003     1899.0220211331"
         val oneUserWithInvalidProductValue =
             "0000000008                             Terra Daniel DDS00000008360000000003     18 9.0220210909"
+        val invalidDateValue = "20211331"
     }
 }

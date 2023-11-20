@@ -30,6 +30,24 @@ class UserServiceTest {
     }
 
     @Test
+    fun `must return UserTxtFileResponseDTO with one user, two orders and products`() {
+        // given
+        val dataFile = File("src/test/resources/data/valid-test-one-user-with-two-ordes-and-products.txt")
+        val file: MultipartFile = MockMultipartFile(
+            "test.txt",
+            "valid-test-one-user-with-two-ordes-and-products.txt",
+            "text/plain",
+            dataFile.inputStream()
+        )
+
+        // when
+        val response = userService.processTxtFile(file)
+
+        // then
+        assertEquals(DataFixtureFactory.ValidDataResponses.validOneUserWithTwoOrdersAndProducts(), response)
+    }
+
+    @Test
     fun `must return UserTxtFileResponseDTO with three users with order and product`() {
         // given
         val dataFile = File("src/test/resources/data/valid-test-three-users-with-order-and-product.txt")
