@@ -13,11 +13,10 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 @Service
-class UserService(
-    val mapper: UserMapper,
-    val orderMapper: OrderMapper,
-    val productMapper: ProductMapper
-){
+class UserService {
+    private val mapper: UserMapper = UserMapper()
+    private val orderMapper: OrderMapper = OrderMapper()
+    private val productMapper: ProductMapper = ProductMapper()
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -26,7 +25,12 @@ class UserService(
         logger.info("M=processTxtFile - Processing txt file")
 
         val lines = try {
-             BufferedReader(InputStreamReader(file.inputStream)).readLines()
+            val fileLines = BufferedReader(InputStreamReader(file.inputStream)).readLines()
+
+            if (fileLines.isEmpty())
+                throw Exception("M=processTxtFile - Error: empty file")
+
+            fileLines
         } catch (e: Exception) {
             logger.error("M=processTxtFile - Error: ${e.message}")
             throw Exception("M=processTxtFile - Error: error reading file")

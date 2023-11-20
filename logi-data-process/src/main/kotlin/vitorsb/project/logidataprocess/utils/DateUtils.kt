@@ -11,6 +11,10 @@ class DateUtils {
 
         val formattedDate = "$year-$month-$day"
 
-        return LocalDate.parse(formattedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        return try {
+            LocalDate.parse(formattedDate, DateTimeFormatter.ISO_DATE)
+        } catch (e: Exception) {
+            throw Exception("Invalid date format: $formattedDate")
+        }
     }
 }

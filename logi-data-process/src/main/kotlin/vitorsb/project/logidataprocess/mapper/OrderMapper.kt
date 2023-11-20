@@ -5,9 +5,8 @@ import vitorsb.project.logidataprocess.dto.order.OrderTxtFileResponseDTO
 import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
 
 @Component
-class OrderMapper(
-    val productMapper: ProductMapper
-) {
+class OrderMapper {
+    private val productMapper: ProductMapper = ProductMapper()
     fun toOrderTxtFileResponseDTO(lineDTO: ProcessTxtLineDTO): OrderTxtFileResponseDTO {
         return OrderTxtFileResponseDTO(
             order_id = lineDTO.orderId,

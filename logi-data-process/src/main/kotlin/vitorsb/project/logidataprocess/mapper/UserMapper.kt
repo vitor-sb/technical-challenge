@@ -6,24 +6,16 @@ import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
 import vitorsb.project.logidataprocess.utils.DateUtils
 
 @Component
-class UserMapper(
-    val orderMapper: OrderMapper
-) {
+class UserMapper {
+    private val orderMapper: OrderMapper = OrderMapper()
     fun toProcessTxtLineDTO(line: String): ProcessTxtLineDTO {
-        val userId = line.substring(0, 10).toLong()
-        val userName = line.substring(10, 55).trimStart()
-        val orderId = line.substring(55, 65).toLong()
-        val productId = line.substring(65, 75).toLong()
-        val productValue = line.substring(75, 87).toDouble()
-        val purchaseDate = DateUtils().formatStringToLocalDate(line.substring(87, 95))
-
         return ProcessTxtLineDTO(
-            userId = userId,
-            userName = userName,
-            orderId = orderId,
-            productId = productId,
-            productValue = productValue,
-            purchaseDate = purchaseDate
+            userId = line.substring(0, 10).toLong(),
+            userName = line.substring(10, 55).trimStart(),
+            orderId = line.substring(55, 65).toLong(),
+            productId = line.substring(65, 75).toLong(),
+            productValue = line.substring(75, 87).toDouble(),
+            purchaseDate = DateUtils().formatStringToLocalDate(line.substring(87, 95))
         )
     }
 

@@ -12,4 +12,4 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         show-sql: false
         format_sql: false
-    open-in-view: false # when false, it avoids performance problems and forces the use of the Transactional annotation
+    open-in-view: false
