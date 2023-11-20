@@ -66,6 +66,28 @@ class UserServiceTest {
             // then
             assertEquals("M=processTxtFile - Error: error reading file", e.message)
         }
+    }
 
+    @Test
+    fun `should return an invalid number of characters error`() {
+        // given
+        val dataFile = File("src/test/resources/data/invalid-test-one-user-line-with-invalid-length.txt")
+        val file: MultipartFile = MockMultipartFile(
+            "test.txt",
+            "invalid-test-one-user-line-with-invalid-length.txt",
+            "text/plain",
+            dataFile.inputStream()
+        )
+
+        // when
+        try {
+            userService.processTxtFile(file)
+            fail("it should return an invalid number of characters error")
+        } catch (e: Exception) {
+            // then
+            val expectedErrorMessage = "M=processTxtFile - Error: invalid line length (line: " +
+                    "0000000088                             Terra Daniel DDS00000008360000000003     1899)"
+            assertEquals(expectedErrorMessage, e.message)
+        }
     }
 }
