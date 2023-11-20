@@ -1,11 +1,8 @@
 package controller
 
 import fixtures.DataFixtureFactory
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
-import org.mockito.Mock
+import org.junit.jupiter.api.*
+import org.mockito.Mockito.mock
 import org.springframework.http.ResponseEntity
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
@@ -21,22 +18,19 @@ import java.io.File
 
 class UserControllerTest {
 
-    @Mock
-    private lateinit var userRepository: UserRepository
-    @Mock
-    private lateinit var productRepository: ProductRepository
-    @Mock
-    private lateinit var orderRepository: OrderRepository
-    @Mock
-    private lateinit var orderProductRelationRepository: OrderProductRelationRepository
+    private val userRepository = mock(UserRepository::class.java)
+    private val productRepository = mock(ProductRepository::class.java)
+    private val orderRepository = mock(OrderRepository::class.java)
+    private val orderProductRelationRepository =
+        mock(OrderProductRelationRepository::class.java)
 
-    private lateinit var userService: UserService
-    private lateinit var orderService: OrderService
     private lateinit var productService: ProductService
+    private lateinit var orderService: OrderService
+    private lateinit var userService: UserService
 
     private lateinit var userController: UserController
 
-    @BeforeAll
+    @BeforeEach
     fun setUp() {
         productService = ProductService(productRepository)
         orderService = OrderService(orderRepository, orderProductRelationRepository)

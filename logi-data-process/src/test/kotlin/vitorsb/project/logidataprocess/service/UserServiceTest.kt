@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
 import fixtures.DataFixtureFactory
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.fail
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
 import vitorsb.project.logidataprocess.repository.OrderRepository
 import vitorsb.project.logidataprocess.repository.ProductRepository
@@ -19,24 +19,21 @@ import java.io.File
 
 class UserServiceTest {
 
-    @Mock
-    private lateinit var userRepository: UserRepository
-    @Mock
-    private lateinit var productRepository: ProductRepository
-    @Mock
-    private lateinit var orderRepository: OrderRepository
-    @Mock
-    private lateinit var orderProductRelationRepository: OrderProductRelationRepository
+    private val userRepository = mock(UserRepository::class.java)
+    private val productRepository = mock(ProductRepository::class.java)
+    private val orderRepository = mock(OrderRepository::class.java)
+    private val orderProductRelationRepository =
+        mock(OrderProductRelationRepository::class.java)
 
     private lateinit var userService: UserService
     private lateinit var orderService: OrderService
     private lateinit var productService: ProductService
 
-    @BeforeAll
+    @BeforeEach
     fun setUp() {
-        userService = UserService(userRepository, orderService, productService)
         productService = ProductService(productRepository)
         orderService = OrderService(orderRepository, orderProductRelationRepository)
+        userService = UserService(userRepository, orderService, productService)
     }
 
     @Test
