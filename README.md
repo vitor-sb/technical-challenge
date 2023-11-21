@@ -1,5 +1,6 @@
 # Project LogiDataTransform 
 
+## Table of Contents
 1. [Requirements](#requirements)
 2. [Libraries used in the project](#libraries-used-in-the-project)
 3. [Defining the environment variables used in application.yml](#defining-the-environment-variables-used-in-applicationyml)
@@ -42,3 +43,8 @@
         2. In the `name` field, enter the name of the variable
         3. In the `value` field, enter the value of the variable
         4. Click `OK`
+
+---
+
+#### TODO: 
+- Increase Coverage percentage by creating new unit tests
