@@ -1,0 +1,16 @@
+version: "3.5"
+
+services:
+  mysql_container:
+    image: mysql:8.0.33
+    container_name: logi_container
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: sliver123
+      MYSQL_DATABASE: logi_database
+      MYSQL_USER: default_user
+      MYSQL_PASSWORD: sliver
+    restart: always
