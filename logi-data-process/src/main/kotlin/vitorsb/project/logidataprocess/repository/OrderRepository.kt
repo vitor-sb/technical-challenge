@@ -10,7 +10,7 @@ import java.util.*
 
 @Repository
 interface OrderRepository: JpaRepository<Order, Long> {
-    fun findByUserIdAndExternalId(externalId: Long, userId:Long): Optional<Order>
+    fun findByExternalIdAndUser_Id(externalId: Long, userId:Long): Optional<Order>
     fun findByUserId(userId: Long): List<Order>
 
     @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.purchaseDate >= :initialDate AND o.purchaseDate <= :finalDate")

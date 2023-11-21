@@ -9,6 +9,7 @@ import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
 import vitorsb.project.logidataprocess.entity.Order
 import vitorsb.project.logidataprocess.entity.OrderProductRelation
 import vitorsb.project.logidataprocess.entity.User
+import vitorsb.project.logidataprocess.utils.CalcUtils
 
 @Component
 class OrderMapper {
@@ -59,9 +60,10 @@ class OrderMapper {
             productMapper.toProductResponseDTO(it)
         }.toMutableList()
 
+        val formattedTotal = CalcUtils().roundsValue(order.products.sumOf { it.value })
         return OrderResponseDTO(
             order_id = order.externalId,
-            total = order.products.sumOf { it.value },
+            total = formattedTotal,
             date = order.purchaseDate,
             products = productsResponseDTO
         )
