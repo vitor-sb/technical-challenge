@@ -40,6 +40,7 @@
 - [LoggerFactory](https://www.slf4j.org/api/org/slf4j/LoggerFactory.html)
 - [JUnit 5](https://junit.org/junit5/)
 - [Mockito](https://site.mockito.org/)
+- [Jacoco](https://www.eclemma.org/jacoco/)
 - [H2 database](https://www.h2database.com/html/main.html) (For unit testing - Not implemented)
 
 ---
