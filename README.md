@@ -1,5 +1,10 @@
 # Project LogiDataTransform 
 
+1. [Requirements](#requirements)
+2. [Libraries used in the project](#libraries-used-in-the-project)
+3. [Defining the environment variables used in application.yml](#defining-the-environment-variables-used-in-applicationyml)
+    1. [IntelliJ IDEA](#intellij-idea)
+
 ---
 
 ## Requirements
@@ -7,6 +12,20 @@
 2. Kotlin 1.6.21
 3. Docker
 4. MySQL 8.0.33
+
+---
+
+### Libraries used in the project
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [Spring Web](https://spring.io/guides/gs/serving-web-content/)
+- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+- [MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
+- [Hibernate Validator](https://hibernate.org/validator/)
+- [Liquibase](https://contribute.liquibase.com/extensions-integrations/directory/integration-docs/springboot/springboot/)
+- [LoggerFactory](https://www.slf4j.org/api/org/slf4j/LoggerFactory.html)
+- [JUnit 5](https://junit.org/junit5/)
+- [Mockito](https://site.mockito.org/)
+- [H2 database](https://www.h2database.com/html/main.html) (For unit testing - Not implemented)
 
 ---
 ### Defining the environment variables used in application.yml
