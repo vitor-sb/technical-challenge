@@ -1,10 +1,24 @@
 # Project LogiDataTransform 
 
+---
+
 ## Table of Contents
-1. [Requirements](#requirements)
-2. [Libraries used in the project](#libraries-used-in-the-project)
-3. [Defining the environment variables used in application.yml](#defining-the-environment-variables-used-in-applicationyml)
-    1. [IntelliJ IDEA](#intellij-idea)
+1. [ToDo](#todo)
+2. [API design](#api-design)
+3. [Requirements](#requirements)
+4. [Libraries used in the project](#libraries-used-in-the-project)
+5. [Defining the environment variables used in application.yml](#defining-the-environment-variables-used-in-applicationyml)
+
+---
+
+#### ToDo
+1. Increase Coverage percentage by creating new unit tests
+2. Use H2 Database for testing
+
+---
+## API design
+
+[Main function design](https://miro.com/app/board/uXjVNMKk4OI=/?moveToWidget=3458764570634815267&cot=14)
 
 ---
 
@@ -43,8 +57,3 @@
         2. In the `name` field, enter the name of the variable
         3. In the `value` field, enter the value of the variable
         4. Click `OK`
-
----
-
-#### TODO: 
-- Increase Coverage percentage by creating new unit tests
