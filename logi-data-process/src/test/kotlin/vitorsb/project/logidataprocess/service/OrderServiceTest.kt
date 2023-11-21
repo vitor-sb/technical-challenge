@@ -17,23 +17,23 @@ import vitorsb.project.logidataprocess.service.ProductService
 import vitorsb.project.logidataprocess.service.UserService
 import java.io.File
 
-class UserServiceTest {
+class OrderServiceTest {
 
-    private val userRepository = mock(UserRepository::class.java)
     private val productRepository = mock(ProductRepository::class.java)
+    private val userRepository = mock(UserRepository::class.java)
     private val orderRepository = mock(OrderRepository::class.java)
     private val orderProductRelationRepository =
         mock(OrderProductRelationRepository::class.java)
 
+    private lateinit var productService: ProductService
     private lateinit var userService: UserService
     private lateinit var orderService: OrderService
-    private lateinit var productService: ProductService
 
     @BeforeEach
     fun setUp() {
         productService = ProductService(productRepository)
-        orderService = OrderService(orderRepository, orderProductRelationRepository)
-        userService = UserService(userRepository, orderService, productService)
+        userService = UserService(userRepository)
+        orderService = OrderService(orderRepository, orderProductRelationRepository, userService, productService)
     }
 
     @Test
@@ -48,7 +48,7 @@ class UserServiceTest {
         )
 
         // when
-        val response = userService.processTxtFile(file)
+        val response = orderService.processTxtFile(file)
 
         // then
         assertEquals(DataFixtureFactory.ValidDataResponses.validOneUserWithOneOrderAndThreeProducts(), response)
@@ -66,7 +66,7 @@ class UserServiceTest {
         )
 
         // when
-        val response = userService.processTxtFile(file)
+        val response = orderService.processTxtFile(file)
 
         // then
         assertEquals(DataFixtureFactory.ValidDataResponses.validOneUserWithTwoOrdersAndProducts(), response)
@@ -84,7 +84,7 @@ class UserServiceTest {
         )
 
         // when
-        val response = userService.processTxtFile(file)
+        val response = orderService.processTxtFile(file)
 
         // then
         assertEquals(DataFixtureFactory.ValidDataResponses.validThreeUsersWithOrderAndProduct(), response)
@@ -101,7 +101,7 @@ class UserServiceTest {
         )
 
         // when
-        val response = userService.processTxtFile(file)
+        val response = orderService.processTxtFile(file)
 
         // then
         assertEquals(DataFixtureFactory.ValidDataResponses.validTwoUsersWithOrderAndProduct(), response)
@@ -120,7 +120,7 @@ class UserServiceTest {
 
         // when
         try {
-            userService.processTxtFile(file)
+            orderService.processTxtFile(file)
             fail("it should return an empty file error")
         } catch (e: Exception) {
             // then
@@ -141,7 +141,7 @@ class UserServiceTest {
 
         // when
         try {
-            userService.processTxtFile(file)
+            orderService.processTxtFile(file)
             fail("it should return an invalid number of characters error")
         } catch (e: Exception) {
             // then

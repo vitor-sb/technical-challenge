@@ -6,8 +6,8 @@ import javax.persistence.*
 data class OrderProductRelation(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    @Column(nullable = false)
-    val product_id: Long,
-    @Column(nullable = false)
-    val order_id: Long
+    @Column(name = "product_id", nullable = false)
+    val productId: Long,
+    @Column(name = "order_id", nullable = false)
+    val orderId: Long
 )

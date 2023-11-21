@@ -11,6 +11,20 @@ import javax.servlet.http.HttpServletRequest
 @RestControllerAdvice
 class ExceptionHandler {
 
+    @ExceptionHandler(NotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleNotFound(
+        exception: NotFoundException,
+        request: HttpServletRequest
+    ): ErrorDTO {
+        return ErrorDTO(
+            status = HttpStatus.NOT_FOUND.value(),
+            error = HttpStatus.NOT_FOUND.name,
+            message = exception.message,
+            path = request.servletPath
+        )
+    }
+
     @ExceptionHandler(Exception::class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     fun handleServerError(

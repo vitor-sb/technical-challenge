@@ -6,7 +6,7 @@ import org.mockito.Mockito.mock
 import org.springframework.http.ResponseEntity
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
-import vitorsb.project.logidataprocess.controller.UserController
+import vitorsb.project.logidataprocess.controller.OrderController
 import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
 import vitorsb.project.logidataprocess.repository.OrderRepository
 import vitorsb.project.logidataprocess.repository.ProductRepository
@@ -16,7 +16,7 @@ import vitorsb.project.logidataprocess.service.ProductService
 import vitorsb.project.logidataprocess.service.UserService
 import java.io.File
 
-class UserControllerTest {
+class OrderControllerTest {
 
     private val userRepository = mock(UserRepository::class.java)
     private val productRepository = mock(ProductRepository::class.java)
@@ -28,14 +28,14 @@ class UserControllerTest {
     private lateinit var orderService: OrderService
     private lateinit var userService: UserService
 
-    private lateinit var userController: UserController
+    private lateinit var orderController: OrderController
 
     @BeforeEach
     fun setUp() {
         productService = ProductService(productRepository)
-        orderService = OrderService(orderRepository, orderProductRelationRepository)
-        userService = UserService(userRepository, orderService, productService)
-        userController = UserController(userService)
+        userService = UserService(userRepository)
+        orderService = OrderService(orderRepository, orderProductRelationRepository, userService, productService)
+        orderController = OrderController(orderService)
     }
 
 
@@ -51,7 +51,7 @@ class UserControllerTest {
         )
 
         // when
-        val response = userController.processTxtFile(file)
+        val response = orderController.processTxtFile(file)
 
         // then
         Assertions.assertEquals(
@@ -76,7 +76,7 @@ class UserControllerTest {
 
         try {
             // when
-            userController.processTxtFile(file)
+            orderController.processTxtFile(file)
             fail("it should return an invalid file type")
         } catch (e: Exception) {
             // then

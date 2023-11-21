@@ -3,18 +3,18 @@ package vitorsb.project.logidataprocess.mapper
 import org.springframework.stereotype.Component
 import vitorsb.project.logidataprocess.dto.order.OrderDTO
 import vitorsb.project.logidataprocess.dto.order.OrderProductRelationDTO
-import vitorsb.project.logidataprocess.dto.order.OrderTxtFileResponseDTO
+import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
+import vitorsb.project.logidataprocess.dto.product.ProductResponseDTO
 import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
 import vitorsb.project.logidataprocess.entity.Order
 import vitorsb.project.logidataprocess.entity.OrderProductRelation
-import vitorsb.project.logidataprocess.entity.Product
 import vitorsb.project.logidataprocess.entity.User
 
 @Component
 class OrderMapper {
     private val productMapper: ProductMapper = ProductMapper()
-    fun toOrderTxtFileResponseDTO(lineDTO: ProcessTxtLineDTO): OrderTxtFileResponseDTO {
-        return OrderTxtFileResponseDTO(
+    fun toOrderTxtFileResponseDTO(lineDTO: ProcessTxtLineDTO): OrderResponseDTO {
+        return OrderResponseDTO(
             order_id = lineDTO.orderId,
             total = lineDTO.productValue,
             date = lineDTO.purchaseDate,
@@ -32,7 +32,7 @@ class OrderMapper {
         )
     }
 
-    fun toDto(it: OrderTxtFileResponseDTO, userId: Long): OrderDTO {
+    fun responseDtoToDto(it: OrderResponseDTO, userId: Long): OrderDTO {
         return OrderDTO(
             externalId = it.order_id,
             userId = userId,
@@ -49,8 +49,28 @@ class OrderMapper {
 
     fun toOrderProductRelationEntity(dto: OrderProductRelationDTO): OrderProductRelation {
         return OrderProductRelation(
-            order_id = dto.orderId,
-            product_id = dto.productId
+            orderId = dto.orderId,
+            productId = dto.productId
         )
+    }
+
+    fun toDto(order: Order): OrderResponseDTO {
+        val productsResponseDTO: MutableList<ProductResponseDTO> = order.products.map {
+            productMapper.toProductResponseDTO(it)
+        }.toMutableList()
+
+        return OrderResponseDTO(
+            order_id = order.externalId,
+            total = order.products.sumOf { it.value },
+            date = order.purchaseDate,
+            products = productsResponseDTO
+        )
+
+    }
+
+    fun toDto(orders: List<Order>): MutableList<OrderResponseDTO> {
+        return orders.map {
+            toDto(it)
+        }.toMutableList()
     }
 }

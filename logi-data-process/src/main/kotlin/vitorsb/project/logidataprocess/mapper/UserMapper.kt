@@ -1,6 +1,7 @@
 package vitorsb.project.logidataprocess.mapper
 
 import org.springframework.stereotype.Component
+import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
 import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
 import vitorsb.project.logidataprocess.dto.user.UserDTO
 import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO

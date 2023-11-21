@@ -17,11 +17,11 @@ data class Order(
     @JoinColumn(name = "user_id", nullable = false)
     var user: User? = null,
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "order_product_relation",
         joinColumns = [JoinColumn(name = "order_id")],
         inverseJoinColumns = [JoinColumn(name = "product_id")]
     )
-    val products: MutableList<Product> = ArrayList()
+    var products: MutableList<Product> = ArrayList()
 )

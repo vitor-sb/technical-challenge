@@ -1,9 +1,9 @@
 package vitorsb.project.logidataprocess.dto.user
 
-import vitorsb.project.logidataprocess.dto.order.OrderTxtFileResponseDTO
+import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
 
 data class UserTxtFileResponseDTO(
     val user_id: Long,
     val name: String,
-    val orders: MutableList<OrderTxtFileResponseDTO> = mutableListOf()
+    val orders: MutableList<OrderResponseDTO> = mutableListOf()
 )
