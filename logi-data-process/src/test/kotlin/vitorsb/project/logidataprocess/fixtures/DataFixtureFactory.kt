@@ -1,4 +1,4 @@
-package fixtures
+package vitorsb.project.logidataprocess.fixtures
 
 import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
 import vitorsb.project.logidataprocess.dto.product.ProductResponseDTO

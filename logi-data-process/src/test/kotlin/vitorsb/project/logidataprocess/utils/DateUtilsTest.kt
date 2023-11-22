@@ -1,10 +1,9 @@
-package utils
+package vitorsb.project.logidataprocess.utils
 
-import fixtures.DataFixtureFactory
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
-import vitorsb.project.logidataprocess.utils.DateUtils
+import vitorsb.project.logidataprocess.fixtures.DataFixtureFactory
 
 class DateUtilsTest {
 

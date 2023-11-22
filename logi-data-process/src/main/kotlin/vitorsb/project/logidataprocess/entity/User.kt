@@ -3,6 +3,7 @@ package vitorsb.project.logidataprocess.entity
 import javax.persistence.*
 
 @Entity
+@Table(name = "user")
 data class User(
     @Id @Column(nullable = false)
     var id: Long,

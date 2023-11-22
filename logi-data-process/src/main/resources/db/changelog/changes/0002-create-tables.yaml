@@ -29,7 +29,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_user_order
-                    references: user(id)
+                    referencedColumnNames: id
+                    referencedTableName: user
         - createTable:
             tableName: product
             columns:
@@ -66,11 +67,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_order_id
-                    references: user_order(id)
+                    referencedTableName: user_order
+                    referencedColumnNames: id
               - column:
                   name: product_id
                   type: bigint
                   constraints:
                     nullable: false
                     foreignKeyName: fk_product_id
-                    references: product(id)
+                    referencedTableName: product
+                    referencedColumnNames: id

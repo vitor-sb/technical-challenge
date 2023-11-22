@@ -1,10 +1,9 @@
-package mapper
+package vitorsb.project.logidataprocess.mapper
 
-import fixtures.DataFixtureFactory
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
-import vitorsb.project.logidataprocess.mapper.UserMapper
+import vitorsb.project.logidataprocess.fixtures.DataFixtureFactory
 
 class UserMapperTest {
     private val userMapper: UserMapper = UserMapper()

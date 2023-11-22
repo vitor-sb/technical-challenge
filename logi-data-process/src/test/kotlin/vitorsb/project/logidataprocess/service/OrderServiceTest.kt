@@ -1,40 +1,19 @@
-package service
+package vitorsb.project.logidataprocess.service
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
-import fixtures.DataFixtureFactory
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.fail
-import org.mockito.Mockito.mock
-import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
-import vitorsb.project.logidataprocess.repository.OrderRepository
-import vitorsb.project.logidataprocess.repository.ProductRepository
-import vitorsb.project.logidataprocess.repository.UserRepository
-import vitorsb.project.logidataprocess.service.OrderService
-import vitorsb.project.logidataprocess.service.ProductService
-import vitorsb.project.logidataprocess.service.UserService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import vitorsb.project.logidataprocess.fixtures.DataFixtureFactory
 import java.io.File
 
+@SpringBootTest
 class OrderServiceTest {
-
-    private val productRepository = mock(ProductRepository::class.java)
-    private val userRepository = mock(UserRepository::class.java)
-    private val orderRepository = mock(OrderRepository::class.java)
-    private val orderProductRelationRepository =
-        mock(OrderProductRelationRepository::class.java)
-
-    private lateinit var productService: ProductService
-    private lateinit var userService: UserService
+    @Autowired
     private lateinit var orderService: OrderService
-
-    @BeforeEach
-    fun setUp() {
-        productService = ProductService(productRepository)
-        userService = UserService(userRepository)
-        orderService = OrderService(orderRepository, orderProductRelationRepository, userService, productService)
-    }
 
     @Test
     fun `must return UserTxtFileResponseDTO list with one user, one order and three products`() {

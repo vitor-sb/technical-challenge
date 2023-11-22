@@ -1,6 +1,7 @@
 package vitorsb.project.logidataprocess.service
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -22,12 +23,20 @@ import java.io.InputStreamReader
 import java.time.LocalDate
 
 @Service
-class OrderService(
-    private val repository: OrderRepository,
-    private val orderProductRelationRepository: OrderProductRelationRepository,
-    private val userService: UserService,
-    private val productService: ProductService
-) {
+class OrderService {
+
+    @Autowired
+    private lateinit var repository: OrderRepository
+
+    @Autowired
+    private lateinit var orderProductRelationRepository: OrderProductRelationRepository
+
+    @Autowired
+    private lateinit var userService: UserService
+
+    @Autowired
+    private lateinit var productService: ProductService
+
     private val mapper: OrderMapper = OrderMapper()
     private val userMapper: UserMapper = UserMapper()
     private val productMapper: ProductMapper = ProductMapper()

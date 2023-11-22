@@ -29,6 +29,7 @@ class OrderMapper {
         return Order(
             externalId = dto.externalId,
             purchaseDate = dto.purchaseDate,
+            userId = dto.userId,
             user = user
         )
     }

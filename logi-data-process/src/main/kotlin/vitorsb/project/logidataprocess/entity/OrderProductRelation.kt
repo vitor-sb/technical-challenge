@@ -3,6 +3,7 @@ package vitorsb.project.logidataprocess.entity
 import javax.persistence.*
 
 @Entity
+@Table(name = "order_product_relation")
 data class OrderProductRelation(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,

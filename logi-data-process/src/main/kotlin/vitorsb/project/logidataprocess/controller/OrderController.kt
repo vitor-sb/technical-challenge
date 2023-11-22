@@ -11,9 +11,9 @@ import vitorsb.project.logidataprocess.service.OrderService
 
 @RestController
 @RequestMapping("/api/orders")
-class OrderController @Autowired constructor(
-    private val service: OrderService
-) {
+class OrderController {
+    @Autowired
+    private lateinit var service: OrderService
 
     @PostMapping("/processTxtFile")
     @ResponseBody

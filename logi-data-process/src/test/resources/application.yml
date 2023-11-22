@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:logi-data-process;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;NON_KEYWORDS=USER;
+    username: sa
+    password:
+  liquibase:
+    user: sa
+    password:
+    drop-first: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        default_schema: PUBLIC
+        dialect: org.hibernate.dialect.H2Dialect
+        show-sql: false
+        format_sql: false
+    open-in-view: false
