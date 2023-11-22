@@ -7,10 +7,15 @@ import org.springframework.web.multipart.MultipartFile
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
+import vitorsb.project.logidataprocess.config.JpaConfig
 import vitorsb.project.logidataprocess.fixtures.DataFixtureFactory
 import java.io.File
 
 @SpringBootTest
+@ActiveProfiles("test")
+@Import(JpaConfig::class)
 class OrderServiceTest {
     @Autowired
     private lateinit var orderService: OrderService

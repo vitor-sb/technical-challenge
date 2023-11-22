@@ -3,23 +3,31 @@ spring:
     active: test
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:logi-data-process;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;NON_KEYWORDS=USER;
+    url: jdbc:h2:mem:db-test
     username: sa
     password:
   liquibase:
+    url: jdbc:h2:mem:db-test
     user: sa
     password:
     drop-first: true
   jpa:
     hibernate:
-      ddl-auto: validate
-      naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+#      naming:
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         default_schema: PUBLIC
         dialect: org.hibernate.dialect.H2Dialect
-        show-sql: false
-        format_sql: false
     open-in-view: false
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

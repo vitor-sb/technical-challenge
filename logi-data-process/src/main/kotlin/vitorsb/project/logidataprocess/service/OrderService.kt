@@ -57,9 +57,9 @@ class OrderService {
 
         userService.findById(userId)
 
-        val order: Order = repository.findByExternalIdAndUser_Id(userId = userId, externalId = orderId).orElseThrow {
-            throw NotFoundException("M=findById, orderId=$orderId, userId: $userId - Order not found!")
-        }
+        val order: Order = repository.findByExternalIdAndAndUserId(userId = userId, externalId = orderId)
+            ?: throw NotFoundException("M=findById, orderId=$orderId, userId: $userId - Order not found!")
+
 
         order.products = productService.findByOrderId(order.id!!)
 

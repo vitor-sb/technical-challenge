@@ -6,14 +6,13 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import vitorsb.project.logidataprocess.entity.Order
 import java.time.LocalDate
-import java.util.*
 
 @Repository
 interface OrderRepository: JpaRepository<Order, Long> {
-    fun findByExternalIdAndUser_Id(externalId: Long, userId:Long): Optional<Order>
+    fun findByExternalIdAndAndUserId(externalId: Long, userId:Long): Order?
     fun findByUserId(userId: Long): List<Order>
 
-    @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.purchaseDate >= :initialDate AND o.purchaseDate <= :finalDate")
+    @Query("SELECT o FROM Order o WHERE o.userId = :userId AND o.purchaseDate >= :initialDate AND o.purchaseDate <= :finalDate")
     fun findByUserIdAndPurchaseDateBetween(
         @Param("userId") userId: Long,
         @Param("initialDate") initialDate: LocalDate,
