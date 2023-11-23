@@ -9,7 +9,7 @@ class UserMapperTest {
     private val userMapper: UserMapper = UserMapper()
 
     @Test
-    fun `Should return invalid id number format error`() {
+    fun `should return invalid id number format error`() {
         // given
         val invalidParameter = DataFixtureFactory.InvalidDatas.oneUserWithInvalidId
         // when
@@ -24,7 +24,7 @@ class UserMapperTest {
     }
 
     @Test
-    fun `Should return invalid purchase date format error`() {
+    fun `should return invalid purchase date format error`() {
         // given
         val invalidParameter = DataFixtureFactory.InvalidDatas.oneUserWithInvalidPurchaseDate
 
@@ -35,7 +35,7 @@ class UserMapperTest {
         } catch (e: Exception) {
             // then
             Assertions.assertEquals(
-                "Invalid date format: 2021-13-31",
+                "M=validateAndFormatDate - Invalid date format: 2021-13-31",
                 e.message
             )
         }
@@ -43,7 +43,7 @@ class UserMapperTest {
     }
 
     @Test
-    fun `Should return invalid product value number format error`() {
+    fun `should return invalid product value number format error`() {
         // given
         val invalidParameter = DataFixtureFactory.InvalidDatas.oneUserWithInvalidProductValue
 

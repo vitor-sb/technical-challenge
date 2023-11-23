@@ -1,10 +1,5 @@
 package vitorsb.project.logidataprocess.fixtures
 
-import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
-import vitorsb.project.logidataprocess.dto.product.ProductResponseDTO
-import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
-import java.time.LocalDate
-
 internal object DataFixtureFactory {
     object InvalidDatas {
         val oneUserWithInvalidId =

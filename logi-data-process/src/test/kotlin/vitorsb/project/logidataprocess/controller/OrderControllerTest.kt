@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.ResponseEntity
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
-import vitorsb.project.logidataprocess.fixtures.DataFixtureFactory
 import vitorsb.project.logidataprocess.fixtures.DtoFixtureFactory
 import java.io.File
 
