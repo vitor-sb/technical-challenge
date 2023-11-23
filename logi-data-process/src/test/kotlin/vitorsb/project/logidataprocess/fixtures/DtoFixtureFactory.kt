@@ -3,6 +3,7 @@ package vitorsb.project.logidataprocess.fixtures
 import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
 import vitorsb.project.logidataprocess.dto.product.ProductResponseDTO
 import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
+import vitorsb.project.logidataprocess.utils.CalcUtil
 import java.time.LocalDate
 
 internal object DtoFixtureFactory {
@@ -52,7 +53,7 @@ internal object DtoFixtureFactory {
                 order_id = 836,
                 products = products,
                 date = LocalDate.parse("2021-09-09"),
-                total = products.sumOf { it.value }
+                total = CalcUtil().roundsValue(products.sumOf { it.value })
             )
 
             val user = UserTxtFileResponseDTO(
@@ -87,7 +88,7 @@ internal object DtoFixtureFactory {
                 order_id = 836,
                 products = firstOrderProducts,
                 date = LocalDate.parse("2021-09-09"),
-                total = firstOrderProducts.sumOf { it.value }
+                total = CalcUtil().roundsValue(firstOrderProducts.sumOf { it.value })
             )
 
             val secondOrder = OrderResponseDTO(

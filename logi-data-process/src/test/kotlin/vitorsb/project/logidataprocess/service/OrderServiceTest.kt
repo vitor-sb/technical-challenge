@@ -33,6 +33,8 @@ class OrderServiceTest {
     private lateinit var service: OrderService
     @Autowired
     private lateinit var repository: OrderRepository
+    @Autowired
+    private lateinit var userRepository: UserRepository
     @MockBean
     private lateinit var userService: UserService
     @MockBean
@@ -41,11 +43,12 @@ class OrderServiceTest {
     @BeforeEach
     fun setup() {
         repository.deleteAll()
+        userRepository.deleteAll()
     }
     @Test
     fun `must create and return an order`() {
         // given
-        val user = EntityFixtureFactory.ValidEntities.validUser()
+        val user = userRepository.save(EntityFixtureFactory.ValidEntities.validUser())
         val order = DtoFixtureFactory.ValidDtos.validOrderResponseDTO()
 
         // when
@@ -58,7 +61,7 @@ class OrderServiceTest {
     @Test
     fun `must return an order by user id and external id`() {
         // given
-        val userEntity = EntityFixtureFactory.ValidEntities.validUser()
+        val userEntity = userRepository.save(EntityFixtureFactory.ValidEntities.validUser())
         val exceptedOrder = repository.save(EntityFixtureFactory.ValidEntities.validOrder(userEntity.id))
 
         given(userService.findById(userEntity.id)).willReturn(userEntity)
