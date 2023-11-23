@@ -3,7 +3,7 @@ package vitorsb.project.logidataprocess.mapper
 import org.springframework.stereotype.Component
 import vitorsb.project.logidataprocess.dto.product.ProductDTO
 import vitorsb.project.logidataprocess.dto.product.ProductResponseDTO
-import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
+import vitorsb.project.logidataprocess.dto.order.ProcessTxtLineDTO
 import vitorsb.project.logidataprocess.entity.Product
 
 @Component

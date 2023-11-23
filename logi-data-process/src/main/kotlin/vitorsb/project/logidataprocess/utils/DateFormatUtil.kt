@@ -7,25 +7,12 @@ import java.time.format.DateTimeParseException
 
 object DateFormatUtil {
     private val logger = LoggerFactory.getLogger(this::class.java)
-    fun formatStringToLocalDate(unformattedDate: String): LocalDate {
-        val year = unformattedDate.substring(0, 4)
-        val month = unformattedDate.substring(4, 6)
-        val day = unformattedDate.substring(6, 8)
-
-        val formattedDate = "$year-$month-$day"
-
-        return try {
-            LocalDate.parse(formattedDate, DateTimeFormatter.ISO_DATE)
-        } catch (e: Exception) {
-            throw Exception("M=validateAndFormatDate - Invalid date format: $formattedDate")
-        }
-    }
-
     fun formatDate(stringDate: String): LocalDate {
         if(stringDate.isEmpty())
             throw IllegalArgumentException("M=validateAndFormatDate - Date cannot be empty")
 
         val formatters = listOf(
+            DateTimeFormatter.ofPattern("yyyyMMdd"),
             DateTimeFormatter.ofPattern("yyyy-MM-dd"),
             DateTimeFormatter.ofPattern("yyyy/MM/dd"),
             DateTimeFormatter.ofPattern("yyyy.MM.dd"),

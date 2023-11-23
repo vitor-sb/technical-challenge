@@ -9,29 +9,11 @@ import org.junit.jupiter.api.fail
 import vitorsb.project.logidataprocess.fixtures.DataFixtureFactory
 
 class DateFormatUtilTest {
-
-    @Test
-    fun `should return invalid purchase date format error`() {
-        // given
-        val invalidParameter = DataFixtureFactory.InvalidDatas.invalidDateValue
-
-        try {
-            // when
-            val date = DateFormatUtil.formatStringToLocalDate(invalidParameter)
-            fail("it should return an invalid date format error, date: $date")
-        } catch (e: Exception) {
-            // then
-            assertEquals(
-                "M=validateAndFormatDate - Invalid date format: 2021-13-31",
-                e.message
-            )
-        }
-    }
-
     @Test
     fun `should parse valid date string in different formats`() {
         // given
         val validDateStrings = listOf(
+            "20211231",
             "2021-12-31",
             "2021/12/31",
             "2021.12.31",

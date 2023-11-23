@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import vitorsb.project.logidataprocess.dto.order.OrderDTO
 import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
-import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
+import vitorsb.project.logidataprocess.dto.order.ProcessTxtLineDTO
 import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
 import vitorsb.project.logidataprocess.entity.Order
 import vitorsb.project.logidataprocess.entity.OrderProductRelation

@@ -1,4 +1,4 @@
-package vitorsb.project.logidataprocess.dto.user
+package vitorsb.project.logidataprocess.dto.order
 
 import java.time.LocalDate
 

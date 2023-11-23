@@ -5,15 +5,28 @@ import vitorsb.project.logidataprocess.dto.order.OrderDTO
 import vitorsb.project.logidataprocess.dto.order.OrderProductRelationDTO
 import vitorsb.project.logidataprocess.dto.order.OrderResponseDTO
 import vitorsb.project.logidataprocess.dto.product.ProductResponseDTO
-import vitorsb.project.logidataprocess.dto.user.ProcessTxtLineDTO
+import vitorsb.project.logidataprocess.dto.order.ProcessTxtLineDTO
 import vitorsb.project.logidataprocess.entity.Order
 import vitorsb.project.logidataprocess.entity.OrderProductRelation
 import vitorsb.project.logidataprocess.entity.User
-import vitorsb.project.logidataprocess.utils.CalcUtils
+import vitorsb.project.logidataprocess.utils.CalcUtil
+import vitorsb.project.logidataprocess.utils.DateFormatUtil
 
 @Component
 class OrderMapper {
     private val productMapper: ProductMapper = ProductMapper()
+
+    fun toProcessTxtLineDTO(line: String): ProcessTxtLineDTO {
+        return ProcessTxtLineDTO(
+            userId = line.substring(0, 10).toLong(),
+            userName = line.substring(10, 55).trimStart(),
+            orderId = line.substring(55, 65).toLong(),
+            productId = line.substring(65, 75).toLong(),
+            productValue = line.substring(75, 87).toDouble(),
+            purchaseDate = DateFormatUtil.formatDate(line.substring(87, 95))
+        )
+    }
+
     fun toOrderTxtFileResponseDTO(lineDTO: ProcessTxtLineDTO): OrderResponseDTO {
         return OrderResponseDTO(
             order_id = lineDTO.orderId,
@@ -61,7 +74,7 @@ class OrderMapper {
             productMapper.toProductResponseDTO(it)
         }.toMutableList()
 
-        val formattedTotal = CalcUtils().roundsValue(order.products.sumOf { it.value })
+        val formattedTotal = CalcUtil().roundsValue(order.products.sumOf { it.value })
         return OrderResponseDTO(
             order_id = order.externalId,
             total = formattedTotal,
