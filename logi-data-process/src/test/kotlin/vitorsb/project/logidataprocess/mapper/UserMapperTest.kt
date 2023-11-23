@@ -11,7 +11,7 @@ class UserMapperTest {
     @Test
     fun `Should return invalid id number format error`() {
         // given
-        val invalidParameter = DataFixtureFactory.InvalidDataParameters.oneUserWithInvalidId
+        val invalidParameter = DataFixtureFactory.InvalidDatas.oneUserWithInvalidId
         // when
         try{
             val lineDto = userMapper.toProcessTxtLineDTO(invalidParameter)
@@ -26,7 +26,7 @@ class UserMapperTest {
     @Test
     fun `Should return invalid purchase date format error`() {
         // given
-        val invalidParameter = DataFixtureFactory.InvalidDataParameters.oneUserWithInvalidPurchaseDate
+        val invalidParameter = DataFixtureFactory.InvalidDatas.oneUserWithInvalidPurchaseDate
 
         // when
         try {
@@ -45,7 +45,7 @@ class UserMapperTest {
     @Test
     fun `Should return invalid product value number format error`() {
         // given
-        val invalidParameter = DataFixtureFactory.InvalidDataParameters.oneUserWithInvalidProductValue
+        val invalidParameter = DataFixtureFactory.InvalidDatas.oneUserWithInvalidProductValue
 
         // when
         try {
