@@ -13,7 +13,6 @@
 
 #### ToDo
 1. Increase Coverage percentage by creating new unit tests
-2. Use H2 Database for testing
 
 ---
 ## API design
