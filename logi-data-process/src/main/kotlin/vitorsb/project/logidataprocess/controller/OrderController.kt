@@ -45,8 +45,8 @@ class OrderController {
     @ResponseBody
     @PostMapping("/processTxtFile")
     fun processTxtFile(
-        @PathVariable(name = "file") file: MultipartFile,
-        @PathVariable(name = "toSave", required = false) toSave: Boolean? = false
+        @RequestParam file: MultipartFile,
+        @RequestParam(required = false) toSave: Boolean? = false
     ): ResponseEntity<MutableList<UserTxtFileResponseDTO>> {
         if (!file.contentType.equals("text/plain"))
             throw InvalidFileTypeException("M=processTxtFile - File The file must be text type")
