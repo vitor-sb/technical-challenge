@@ -1,43 +1,18 @@
-package controller
+package vitorsb.project.logidataprocess.controller
 
-import fixtures.DataFixtureFactory
 import org.junit.jupiter.api.*
-import org.mockito.Mockito.mock
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.ResponseEntity
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
-import vitorsb.project.logidataprocess.controller.OrderController
-import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
-import vitorsb.project.logidataprocess.repository.OrderRepository
-import vitorsb.project.logidataprocess.repository.ProductRepository
-import vitorsb.project.logidataprocess.repository.UserRepository
-import vitorsb.project.logidataprocess.service.OrderService
-import vitorsb.project.logidataprocess.service.ProductService
-import vitorsb.project.logidataprocess.service.UserService
+import vitorsb.project.logidataprocess.fixtures.DtoFixtureFactory
 import java.io.File
 
+@SpringBootTest
 class OrderControllerTest {
-
-    private val userRepository = mock(UserRepository::class.java)
-    private val productRepository = mock(ProductRepository::class.java)
-    private val orderRepository = mock(OrderRepository::class.java)
-    private val orderProductRelationRepository =
-        mock(OrderProductRelationRepository::class.java)
-
-    private lateinit var productService: ProductService
-    private lateinit var orderService: OrderService
-    private lateinit var userService: UserService
-
+    @Autowired
     private lateinit var orderController: OrderController
-
-    @BeforeEach
-    fun setUp() {
-        productService = ProductService(productRepository)
-        userService = UserService(userRepository)
-        orderService = OrderService(orderRepository, orderProductRelationRepository, userService, productService)
-        orderController = OrderController(orderService)
-    }
-
 
     @Test
     fun `must return UserTxtFileResponseDTO list response with one user, one order and three products`() {
@@ -56,7 +31,7 @@ class OrderControllerTest {
         // then
         Assertions.assertEquals(
             ResponseEntity.ok(
-                DataFixtureFactory.ValidDataResponses.validOneUserWithOneOrderAndThreeProducts()
+                DtoFixtureFactory.ValidDtos.validOneUserWithOneOrderAndThreeProducts()
             ),
             response
         )

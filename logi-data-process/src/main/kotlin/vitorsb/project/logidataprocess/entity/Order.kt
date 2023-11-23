@@ -9,19 +9,18 @@ data class Order(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
+    @Column(name = "purchase_date",nullable = false)
     val purchaseDate: LocalDate,
 
+    @Column(name = "external_id", nullable = false)
     val externalId: Long,
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
+    var userId: Long,
+
+    @Transient
     var user: User? = null,
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "order_product_relation",
-        joinColumns = [JoinColumn(name = "order_id")],
-        inverseJoinColumns = [JoinColumn(name = "product_id")]
-    )
+    @Transient
     var products: MutableList<Product> = ArrayList()
 )

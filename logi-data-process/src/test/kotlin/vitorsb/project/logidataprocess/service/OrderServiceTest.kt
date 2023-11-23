@@ -1,39 +1,82 @@
-package service
+package vitorsb.project.logidataprocess.service
 
+import org.aspectj.lang.annotation.Before
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
-import fixtures.DataFixtureFactory
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.fail
-import org.mockito.Mockito.mock
-import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
+import org.mockito.BDDMockito.given
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import vitorsb.project.logidataprocess.config.JpaConfig
+import vitorsb.project.logidataprocess.fixtures.DtoFixtureFactory
+import vitorsb.project.logidataprocess.fixtures.EntityFixtureFactory
 import vitorsb.project.logidataprocess.repository.OrderRepository
-import vitorsb.project.logidataprocess.repository.ProductRepository
 import vitorsb.project.logidataprocess.repository.UserRepository
-import vitorsb.project.logidataprocess.service.OrderService
-import vitorsb.project.logidataprocess.service.ProductService
-import vitorsb.project.logidataprocess.service.UserService
 import java.io.File
 
+@SpringBootTest
+@ActiveProfiles("test")
+@ExtendWith(SpringExtension::class)
+@Import(JpaConfig::class)
 class OrderServiceTest {
-
-    private val productRepository = mock(ProductRepository::class.java)
-    private val userRepository = mock(UserRepository::class.java)
-    private val orderRepository = mock(OrderRepository::class.java)
-    private val orderProductRelationRepository =
-        mock(OrderProductRelationRepository::class.java)
-
-    private lateinit var productService: ProductService
+    @Autowired
+    private lateinit var service: OrderService
+    @Autowired
+    private lateinit var repository: OrderRepository
+    @Autowired
+    private lateinit var userRepository: UserRepository
+    @MockBean
     private lateinit var userService: UserService
-    private lateinit var orderService: OrderService
+    @MockBean
+    private lateinit var productService: ProductService
 
     @BeforeEach
-    fun setUp() {
-        productService = ProductService(productRepository)
-        userService = UserService(userRepository)
-        orderService = OrderService(orderRepository, orderProductRelationRepository, userService, productService)
+    fun setup() {
+        repository.deleteAll()
+        userRepository.deleteAll()
+    }
+    @Test
+    fun `must create and return an order`() {
+        // given
+        val user = userRepository.save(EntityFixtureFactory.ValidEntities.validUser())
+        val order = DtoFixtureFactory.ValidDtos.validOrderResponseDTO()
+
+        // when
+        val response = service.createOrder(order, user)
+
+        // then
+        assertEquals(EntityFixtureFactory.ValidEntities.validOrder(), response)
+    }
+
+    @Test
+    fun `must return an order by user id and external id`() {
+        // given
+        val userEntity = userRepository.save(EntityFixtureFactory.ValidEntities.validUser())
+        val exceptedOrder = repository.save(EntityFixtureFactory.ValidEntities.validOrder(userEntity.id))
+
+        given(userService.findById(userEntity.id)).willReturn(userEntity)
+
+        given(productService.findByOrderId(exceptedOrder.id!!)).willReturn(
+            mutableListOf(
+                EntityFixtureFactory.ValidEntities.validProduct(exceptedOrder.id!!)
+            )
+        )
+
+        // when
+        val response = service.findByUserIdAndExternalId(userEntity.id, exceptedOrder.externalId)
+
+        // then
+        assertEquals(DtoFixtureFactory.ValidDtos.validOrderResponseDTO(), response)
     }
 
     @Test
@@ -48,10 +91,10 @@ class OrderServiceTest {
         )
 
         // when
-        val response = orderService.processTxtFile(file)
+        val response = service.processTxtFile(file)
 
         // then
-        assertEquals(DataFixtureFactory.ValidDataResponses.validOneUserWithOneOrderAndThreeProducts(), response)
+        assertEquals(DtoFixtureFactory.ValidDtos.validOneUserWithOneOrderAndThreeProducts(), response)
     }
 
     @Test
@@ -66,10 +109,10 @@ class OrderServiceTest {
         )
 
         // when
-        val response = orderService.processTxtFile(file)
+        val response = service.processTxtFile(file)
 
         // then
-        assertEquals(DataFixtureFactory.ValidDataResponses.validOneUserWithTwoOrdersAndProducts(), response)
+        assertEquals(DtoFixtureFactory.ValidDtos.validOneUserWithTwoOrdersAndProducts(), response)
     }
 
     @Test
@@ -84,10 +127,10 @@ class OrderServiceTest {
         )
 
         // when
-        val response = orderService.processTxtFile(file)
+        val response = service.processTxtFile(file)
 
         // then
-        assertEquals(DataFixtureFactory.ValidDataResponses.validThreeUsersWithOrderAndProduct(), response)
+        assertEquals(DtoFixtureFactory.ValidDtos.validThreeUsersWithOrderAndProduct(), response)
     }
     @Test
     fun `must return UserTxtFileResponseDTO list with two users with order and product even with empty line`() {
@@ -101,10 +144,10 @@ class OrderServiceTest {
         )
 
         // when
-        val response = orderService.processTxtFile(file)
+        val response = service.processTxtFile(file)
 
         // then
-        assertEquals(DataFixtureFactory.ValidDataResponses.validTwoUsersWithOrderAndProduct(), response)
+        assertEquals(DtoFixtureFactory.ValidDtos.validTwoUsersWithOrderAndProduct(), response)
     }
 
     @Test
@@ -120,7 +163,7 @@ class OrderServiceTest {
 
         // when
         try {
-            orderService.processTxtFile(file)
+            service.processTxtFile(file)
             fail("it should return an empty file error")
         } catch (e: Exception) {
             // then
@@ -141,7 +184,7 @@ class OrderServiceTest {
 
         // when
         try {
-            orderService.processTxtFile(file)
+            service.processTxtFile(file)
             fail("it should return an invalid number of characters error")
         } catch (e: Exception) {
             // then
