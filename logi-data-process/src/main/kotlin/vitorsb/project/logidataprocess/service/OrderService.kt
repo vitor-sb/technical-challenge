@@ -189,7 +189,7 @@ class OrderService {
                 if(line.length != 95)
                     throw Exception("M=processTxtFile - Error: invalid line length (line: $line)")
 
-                val lineDTO = userMapper.toProcessTxtLineDTO(line)
+                val lineDTO = mapper.toProcessTxtLineDTO(line)
                 val foundUser = processResponse.find { user -> user.user_id == lineDTO.userId }
 
                 if(foundUser !== null) {
