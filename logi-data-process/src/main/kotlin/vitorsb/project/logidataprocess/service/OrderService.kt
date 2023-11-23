@@ -18,6 +18,7 @@ import vitorsb.project.logidataprocess.mapper.ProductMapper
 import vitorsb.project.logidataprocess.mapper.UserMapper
 import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
 import vitorsb.project.logidataprocess.repository.OrderRepository
+import vitorsb.project.logidataprocess.utils.CalcUtil
 import vitorsb.project.logidataprocess.utils.DateFormatUtil
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -216,10 +217,9 @@ class OrderService {
         if(foundOrder !== null) {
             logger.debug("M=createOrUpdateOrder - Adding product to order: ${lineDTO.orderId}")
 
-            foundOrder.products.add(
+            foundOrder.addProduct(
                 productMapper.toProductTxtFileResponseDTO(lineDTO)
             )
-            foundOrder.total += lineDTO.productValue
 
         } else {
             logger.debug("M=createOrUpdateOrder - Creating new order for user: ${foundUser.user_id}")
