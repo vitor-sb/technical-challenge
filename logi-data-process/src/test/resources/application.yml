@@ -3,17 +3,18 @@ spring:
     active: test
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:db-test
+    url: jdbc:h2:mem:db-test;mode=MySQL;NON_KEYWORDS=USER,VALUE
     username: sa
     password:
   liquibase:
-    url: jdbc:h2:mem:db-test
+    enabled: true
+    url: jdbc:h2:mem:db-test;mode=MySQL;NON_KEYWORDS=USER,VALUE
     user: sa
     password:
     drop-first: true
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 #      naming:
 #        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
 #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -27,7 +28,3 @@ logging:
     org:
       hibernate:
         SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE

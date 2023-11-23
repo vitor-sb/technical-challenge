@@ -18,6 +18,7 @@ import vitorsb.project.logidataprocess.mapper.ProductMapper
 import vitorsb.project.logidataprocess.mapper.UserMapper
 import vitorsb.project.logidataprocess.repository.OrderProductRelationRepository
 import vitorsb.project.logidataprocess.repository.OrderRepository
+import vitorsb.project.logidataprocess.utils.DateFormatUtil
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.time.LocalDate
@@ -57,9 +58,8 @@ class OrderService {
 
         userService.findById(userId)
 
-        val order: Order = repository.findByExternalIdAndAndUserId(userId = userId, externalId = orderId)
+        val order: Order = repository.findByExternalIdAndUserId(userId = userId, externalId = orderId)
             ?: throw NotFoundException("M=findById, orderId=$orderId, userId: $userId - Order not found!")
-
 
         order.products = productService.findByOrderId(order.id!!)
 
@@ -68,19 +68,13 @@ class OrderService {
 
     fun findOrdersByUserId(
         userId: Long,
-        startDate: String?,
-        endDate: String? = LocalDate.now().toString()
     ): MutableList<OrderResponseDTO> {
-        logger.debug("M=findOrders - Finding orders")
-        val initialDate: LocalDate? = startDate?.let { LocalDate.parse(it) }
-        val finalDate: LocalDate? = endDate?.let { LocalDate.parse(it) }
+        logger.debug("M=findByUserId - Finding order by userId: $userId")
 
         userService.findById(userId)
 
-        val orders: List<Order> = if(initialDate !== null && finalDate !== null) {
-            findByUserIdAndPurchaseDateBetween(userId, initialDate, finalDate)
-        } else {
-            findByUserId(userId)
+        val orders: List<Order> = repository.findByUserId(userId).ifEmpty {
+            throw NotFoundException("M=findByUserId - Order not found!")
         }
 
         orders.forEach {
@@ -90,33 +84,71 @@ class OrderService {
         return mapper.toDto(orders)
     }
 
-    private fun findByUserIdAndPurchaseDateBetween(
+    fun findByUserIdAndPurchaseDateBetween(
         userId: Long,
-        initialDate: LocalDate,
-        finalDate: LocalDate
-    ): List<Order> {
+        startDate: String?,
+        endDate: String?
+    ): MutableList<OrderResponseDTO> {
         logger.debug("M=findByUserIdAndPurchaseDateBetween - " +
-                "Finding order by userId: $userId, initialDate: $initialDate, finalDate: $finalDate")
+                "Finding order by userId: $userId, initialDate: $startDate, finalDate: $endDate")
 
-        if (initialDate.isAfter(finalDate))
-            throw IllegalArgumentException("M=findByUserIdAndPurchaseDateBetween - Initial date must be before final date!")
+        val orders: List<Order> = when {
+             startDate !== null && endDate !== null -> {
+                val initialDate = DateFormatUtil.formatDate(startDate)
+                val finalDate = DateFormatUtil.formatDate(endDate)
+                validateDates(initialDate, finalDate)
 
-        val orders: List<Order> = repository.findByUserIdAndPurchaseDateBetween(userId, initialDate, finalDate).ifEmpty {
-            throw NotFoundException("M=findByUserIdAndPurchaseDateBetween - Order not found!")
+                repository.findByUserIdAndPurchaseDateBetween(userId, initialDate, finalDate).ifEmpty {
+                    throw NotFoundException("M=findByUserIdAndPurchaseDateBetween - Orders not found within the period!")
+                }
+            }
+            startDate !== null -> {
+                val initialDate = DateFormatUtil.formatDate(startDate)
+                validateDates(initialDate)
+
+                repository.findByUserIdAndPurchaseDateBetween(userId, initialDate, LocalDate.now()).ifEmpty {
+                    throw NotFoundException("M=findByUserIdAndPurchaseDateBetween - Orders not found within the period!")
+                }
+            }
+            endDate !== null -> {
+                val finalDate = DateFormatUtil.formatDate(endDate)
+                validateDates(finalDate)
+
+                repository.findByUserIdAndPurchaseDateUntil(userId, finalDate).ifEmpty {
+                    throw NotFoundException("M=findByUserIdAndPurchaseDateBetween - Orders not found within the period!")
+                }
+            }
+            else -> {
+                throw IllegalArgumentException(
+                    "M=findByUserIdAndPurchaseDateBetween - " +
+                            "Initial date and final date cannot be null at the same time!"
+                )
+            }
         }
 
         orders.forEach {
             it.products = productService.findByOrderId(it.id!!)
         }
 
-        return orders
+        return mapper.toDto(orders)
     }
 
-    private fun findByUserId(userId: Long): List<Order> {
-        logger.debug("M=findByUserId - Finding order by userId: $userId")
+    private fun validateDates(initialDate: LocalDate, finalDate: LocalDate? = null) {
+        if(initialDate.isAfter(LocalDate.now()))
+            throw IllegalArgumentException(
+                "M=findByUserIdAndPurchaseDateBetween - Initial date must be before today!"
+            )
 
-        return repository.findByUserId(userId).ifEmpty {
-            throw NotFoundException("M=findByUserId - Order not found!")
+        if (finalDate !== null) {
+            if (initialDate.isAfter(finalDate))
+                throw IllegalArgumentException(
+                    "M=findByUserIdAndPurchaseDateBetween - Initial date must be before final date!"
+                )
+
+            if(finalDate.isAfter(LocalDate.now()))
+                throw IllegalArgumentException(
+                    "M=findByUserIdAndPurchaseDateBetween - Final date must be before today!"
+                )
         }
     }
 
@@ -126,7 +158,9 @@ class OrderService {
 
         val orderProductRelationDTO = mapper.orderProductRelationDTO(orderId, productId)
 
-        return orderProductRelationRepository.save(mapper.toOrderProductRelationEntity(orderProductRelationDTO))
+        return orderProductRelationRepository.save(
+            mapper.toOrderProductRelationEntity(orderProductRelationDTO)
+        )
     }
 
     @Transactional
@@ -173,7 +207,10 @@ class OrderService {
         return processResponse
     }
 
-    private fun createOrUpdateOrder(foundUser: UserTxtFileResponseDTO, lineDTO: ProcessTxtLineDTO) {
+    private fun createOrUpdateOrder(
+        foundUser: UserTxtFileResponseDTO,
+        lineDTO: ProcessTxtLineDTO
+    ) {
         val foundOrder = foundUser.orders.find { order -> order.order_id == lineDTO.orderId }
 
         if(foundOrder !== null) {
@@ -190,8 +227,9 @@ class OrderService {
         }
     }
 
-    @Transactional
-    fun persistUsersAndOrdersAndProducts(users: MutableList<UserTxtFileResponseDTO>) {
+    private fun persistUsersAndOrdersAndProducts(
+        users: MutableList<UserTxtFileResponseDTO>
+    ) {
         logger.debug("M=saveUsers - Saving ${users.size} users")
 
         users.forEach { user ->

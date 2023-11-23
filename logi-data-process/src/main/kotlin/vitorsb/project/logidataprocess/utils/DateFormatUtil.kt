@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class DateUtils {
+object DateFormatUtil {
     private val logger = LoggerFactory.getLogger(this::class.java)
     fun formatStringToLocalDate(unformattedDate: String): LocalDate {
         val year = unformattedDate.substring(0, 4)
@@ -17,11 +17,13 @@ class DateUtils {
         return try {
             LocalDate.parse(formattedDate, DateTimeFormatter.ISO_DATE)
         } catch (e: Exception) {
-            throw Exception("Invalid date format: $formattedDate")
+            throw Exception("M=validateAndFormatDate - Invalid date format: $formattedDate")
         }
     }
 
-    fun validateAndFormatDate(stringDate: String): LocalDate {
+    fun formatDate(stringDate: String): LocalDate {
+        if(stringDate.isEmpty())
+            throw IllegalArgumentException("M=validateAndFormatDate - Date cannot be empty")
 
         val formatters = listOf(
             DateTimeFormatter.ofPattern("yyyy-MM-dd"),
@@ -32,21 +34,15 @@ class DateUtils {
             DateTimeFormatter.ISO_DATE
         )
 
-        var formattedDate: LocalDate?
-
         for (formatter in formatters) {
             try {
-                formattedDate =  LocalDate.parse(stringDate, formatter)
+                return LocalDate.parse(stringDate, formatter)
             } catch (e: DateTimeParseException){
-                logger.debug("M=validateAndFormatDate - " +
+                logger.debug("M=formatDate - " +
                         "Trying to parse date: $stringDate with formatter: $formatter")
             }
         }
 
-        if(formattedDate == null)
-            throw Exception("Invalid date format: $stringDate")
-
-
-        return formatStringToLocalDate(date)
+        throw IllegalArgumentException("M=formatDate - Invalid date format: $stringDate")
     }
 }

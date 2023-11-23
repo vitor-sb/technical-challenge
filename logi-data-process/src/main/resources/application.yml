@@ -15,3 +15,13 @@ spring:
         show-sql: false
         format_sql: false
     open-in-view: false
+logging:
+  level:
+    liquibase: ERROR
+    root: INFO
+    org:
+      hibernate:
+        SQL: ERROR
+        LazyInitializationException: DEBUG
+      springframework: INFO
+      web: ERROR

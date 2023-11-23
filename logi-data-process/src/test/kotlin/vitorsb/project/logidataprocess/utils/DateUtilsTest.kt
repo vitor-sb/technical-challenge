@@ -10,11 +10,11 @@ class DateUtilsTest {
     @Test
     fun `Should return invalid purchase date format error`() {
         // given
-        val invalidParameter = DataFixtureFactory.InvalidDataParameters.invalidDateValue
+        val invalidParameter = DataFixtureFactory.InvalidDatas.invalidDateValue
 
         try {
             // when
-            val date = DateUtils().formatStringToLocalDate(invalidParameter)
+            val date = DateFormatUtil.formatStringToLocalDate(invalidParameter)
             fail("it should return an invalid date format error, date: $date")
         } catch (e: Exception) {
             // then

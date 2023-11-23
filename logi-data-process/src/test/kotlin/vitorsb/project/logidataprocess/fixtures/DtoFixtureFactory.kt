@@ -5,8 +5,33 @@ import vitorsb.project.logidataprocess.dto.product.ProductResponseDTO
 import vitorsb.project.logidataprocess.dto.user.UserTxtFileResponseDTO
 import java.time.LocalDate
 
-internal object DataFixtureFactory {
-    object ValidDataResponses {
+internal object DtoFixtureFactory {
+    object ValidDtos {
+
+        fun validOrderResponseDTO(
+            orderId: Long = 836,
+            date: LocalDate = LocalDate.parse("2021-09-09"),
+            products: MutableList<ProductResponseDTO> = mutableListOf(
+                validProductResponseDTO()
+            ),
+        ): OrderResponseDTO {
+            return OrderResponseDTO(
+                order_id = orderId,
+                date = date,
+                products = products,
+                total = products.sumOf { it.value }
+            )
+        }
+        fun validProductResponseDTO(
+            productId: Long = 3,
+            value: Double = 1899.02
+        ): ProductResponseDTO {
+            return ProductResponseDTO(
+                product_id = productId,
+                value = value
+            )
+        }
+
         fun validOneUserWithOneOrderAndThreeProducts(): MutableList<UserTxtFileResponseDTO> {
             val products = mutableListOf(
                 ProductResponseDTO(
@@ -177,15 +202,5 @@ internal object DataFixtureFactory {
 
             return mutableListOf(firstUser, secondUser)
         }
-    }
-
-    object InvalidDataParameters {
-        val oneUserWithInvalidId =
-            "00000oito8                             Terra Daniel DDS00000008360000000003     1899.0220210909"
-        val oneUserWithInvalidPurchaseDate =
-            "0000000008                             Terra Daniel DDS00000008360000000003     1899.0220211331"
-        val oneUserWithInvalidProductValue =
-            "0000000008                             Terra Daniel DDS00000008360000000003     18 9.0220210909"
-        val invalidDateValue = "20211331"
     }
 }

@@ -15,8 +15,35 @@ class OrderController {
     @Autowired
     private lateinit var service: OrderService
 
-    @PostMapping("/processTxtFile")
     @ResponseBody
+    @GetMapping("/byUserId")
+    fun findOrdersByUserId(
+        @RequestParam userId: Long,
+    ): ResponseEntity<MutableList<OrderResponseDTO>> {
+        return ResponseEntity.ok(service.findOrdersByUserId(userId))
+    }
+
+    @ResponseBody
+    @GetMapping("/byUserIdAndOrderId")
+    fun findOrdersByUserIdAndExternalId(
+        @RequestParam userId: Long,
+        @RequestParam orderId: Long
+    ): ResponseEntity<OrderResponseDTO> {
+        return ResponseEntity.ok(service.findByUserIdAndExternalId(userId, orderId))
+    }
+
+    @ResponseBody
+    @GetMapping("/byUserIdAndPurchaseDateBetween")
+    fun findOrdersByUserIdAndPurchaseDateBetween(
+        @RequestParam userId: Long,
+        @RequestParam startDate: String?,
+        @RequestParam endDate: String?
+    ): ResponseEntity<MutableList<OrderResponseDTO>> {
+        return ResponseEntity.ok(service.findByUserIdAndPurchaseDateBetween(userId, startDate, endDate))
+    }
+
+    @ResponseBody
+    @PostMapping("/processTxtFile")
     fun processTxtFile(
         @RequestParam("file") file: MultipartFile,
         @RequestParam("toSave", required = false) toSave: Boolean? = false
@@ -27,22 +54,5 @@ class OrderController {
         val response = service.processTxtFile(file, toSave)
 
         return ResponseEntity.ok(response)
-    }
-
-    @GetMapping("/{userId}/{orderId}")
-    fun findByUserIdAndExternalId(
-        @PathVariable userId: Long,
-        @PathVariable orderId: Long
-    ): ResponseEntity<OrderResponseDTO> {
-        return ResponseEntity.ok(service.findByUserIdAndExternalId(userId, orderId))
-    }
-
-    @GetMapping("/{userId}")
-    fun findOrders(
-        @PathVariable userId: Long,
-        @RequestParam startDate: String?,
-        @RequestParam endDate: String?
-    ): ResponseEntity<MutableList<OrderResponseDTO>> {
-        return ResponseEntity.ok(service.findOrdersByUserId(userId, startDate, endDate))
     }
 }
