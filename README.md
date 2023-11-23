@@ -40,7 +40,7 @@
 - [JUnit 5](https://junit.org/junit5/)
 - [Mockito](https://site.mockito.org/)
 - [Jacoco](https://www.eclemma.org/jacoco/)
-- [H2 database](https://www.h2database.com/html/main.html) (For unit testing - Not implemented)
+- [H2 database](https://www.h2database.com/html/main.html) (For unit test)
 
 ---
 ### Defining the environment variables used in application.yml
